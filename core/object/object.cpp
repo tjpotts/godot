@@ -1417,7 +1417,12 @@ bool Object::_disconnect(const StringName &p_signal, const Callable &p_callable,
 	}
 	ERR_FAIL_NULL_V_MSG(s, false, vformat("Disconnecting nonexistent signal '%s' in %s.", p_signal, to_string()));
 
-	ERR_FAIL_COND_V_MSG(!s->slot_map.has(*p_callable.get_base_comparator()), false, "Attempt to disconnect a nonexistent connection from '" + to_string() + "'. Signal: '" + p_signal + "', callable: '" + p_callable + "'.");
+	if (!s->slot_map.has(*p_callable.get_base_comparator())) {
+		// This could be a result of the hash of ManagedCallables changing when reloading assemblies. Try rehashing all of
+		// the Callables in the HashMap before failing.
+		s->slot_map.rehash();
+		ERR_FAIL_COND_V_MSG(!s->slot_map.has(*p_callable.get_base_comparator()), false, "Attempt to disconnect a nonexistent connection from '" + to_string() + "'. Signal: '" + p_signal + "', callable: '" + p_callable + "'.");
+	}
 
 	SignalData::Slot *slot = &s->slot_map[*p_callable.get_base_comparator()];
 

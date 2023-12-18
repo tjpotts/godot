@@ -66,6 +66,10 @@ uint32_t ManagedCallable::hash() const {
 	return GDMonoCache::managed_callbacks.DelegateUtils_DelegateHash(delegate_handle);
 }
 
+bool ManagedCallable::is_valid() const {
+	return ObjectDB::get_instance(get_object()) != nullptr && delegate_handle.value != nullptr;
+}
+
 String ManagedCallable::get_as_text() const {
 	return "Delegate::Invoke";
 }

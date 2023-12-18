@@ -52,6 +52,7 @@ class ManagedCallable : public CallableCustom {
 
 public:
 	uint32_t hash() const override;
+	bool is_valid() const;
 	String get_as_text() const override;
 	CompareEqualFunc get_compare_equal_func() const override;
 	CompareLessFunc get_compare_less_func() const override;

@@ -408,6 +408,33 @@ public:
 		_resize_and_rehash(new_index);
 	}
 
+	void rehash() {
+		uint32_t capacity = hash_table_size_primes[capacity_index];
+
+		HashMapElement<TKey, TValue> **old_elements = elements;
+		uint32_t *old_hashes = hashes;
+
+		num_elements = 0;
+		hashes = reinterpret_cast<uint32_t *>(Memory::alloc_static(sizeof(uint32_t) * capacity));
+		elements = reinterpret_cast<HashMapElement<TKey, TValue> **>(Memory::alloc_static(sizeof(HashMapElement<TKey, TValue> *) * capacity));
+
+		for (uint32_t i = 0; i < capacity; i++) {
+			hashes[i] = 0;
+			elements[i] = nullptr;
+		}
+
+		for (uint32_t i = 0; i < capacity; i++) {
+			if (old_hashes[i] == EMPTY_HASH) {
+				continue;
+			}
+
+			_insert_with_hash(_hash(old_elements[i]->data.key), old_elements[i]);
+		}
+
+		Memory::free_static(old_elements);
+		Memory::free_static(old_hashes);
+	}
+
 	/** Iterator API **/
 
 	struct ConstIterator {
