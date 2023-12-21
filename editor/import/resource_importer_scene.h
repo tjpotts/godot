@@ -207,6 +207,7 @@ class ResourceImporterScene : public ResourceImporter {
 	enum ShapeType {
 		SHAPE_TYPE_DECOMPOSE_CONVEX,
 		SHAPE_TYPE_SIMPLE_CONVEX,
+		SHAPE_TYPE_SINGLE_CONVEX,
 		SHAPE_TYPE_TRIMESH,
 		SHAPE_TYPE_BOX,
 		SHAPE_TYPE_SPHERE,
@@ -406,7 +407,11 @@ Vector<Ref<Shape3D>> ResourceImporterScene::get_collision_shapes(const Ref<Impor
 		return p_mesh->convex_decompose(decomposition_settings);
 	} else if (generate_shape_type == SHAPE_TYPE_SIMPLE_CONVEX) {
 		Vector<Ref<Shape3D>> shapes;
-		shapes.push_back(p_mesh->create_convex_shape(true, /*Passing false, otherwise VHACD will be used to simplify (Decompose) the Mesh.*/ false));
+		shapes.push_back(p_mesh->create_convex_shape(true, true));
+		return shapes;
+	} else if (generate_shape_type == SHAPE_TYPE_SINGLE_CONVEX) {
+		Vector<Ref<Shape3D>> shapes;
+		shapes.push_back(p_mesh->create_convex_shape(true, false));
 		return shapes;
 	} else if (generate_shape_type == SHAPE_TYPE_TRIMESH) {
 		Vector<Ref<Shape3D>> shapes;
