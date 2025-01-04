@@ -491,6 +491,11 @@ public:
 	EXBIND3(hinge_joint_set_flag, RID, HingeJointFlag, bool)
 	EXBIND2RC(bool, hinge_joint_get_flag, RID, HingeJointFlag)
 
+	EXBIND5(joint_make_distance, RID, RID, const Transform3D &, RID, const Transform3D &)
+
+	EXBIND3(distance_joint_set_param, RID, DistanceJointParam, real_t)
+	EXBIND2RC(real_t, distance_joint_get_param, RID, DistanceJointParam)
+
 	EXBIND5(joint_make_slider, RID, RID, const Transform3D &, RID, const Transform3D &)
 
 	EXBIND3(slider_joint_set_param, RID, SliderJointParam, real_t)

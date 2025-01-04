@@ -351,6 +351,11 @@ public:
 	FUNC3(hinge_joint_set_flag, RID, HingeJointFlag, bool)
 	FUNC2RC(bool, hinge_joint_get_flag, RID, HingeJointFlag)
 
+	FUNC5(joint_make_distance, RID, RID, const Transform3D &, RID, const Transform3D &)
+
+  FUNC3(distance_joint_set_param, RID, DistanceJointParam, real_t)
+  FUNC2RC(real_t, distance_joint_get_param, RID, DistanceJointParam)
+
 	FUNC5(joint_make_slider, RID, RID, const Transform3D &, RID, const Transform3D &)
 
 	FUNC3(slider_joint_set_param, RID, SliderJointParam, real_t)

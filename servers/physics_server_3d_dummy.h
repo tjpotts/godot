@@ -392,6 +392,11 @@ public:
 	virtual void hinge_joint_set_flag(RID p_joint, HingeJointFlag p_flag, bool p_enabled) override {}
 	virtual bool hinge_joint_get_flag(RID p_joint, HingeJointFlag p_flag) const override { return false; }
 
+	virtual void joint_make_distance(RID p_joint, RID p_body_A, const Transform3D &p_distance_a, RID p_body_B, const Transform3D &p_distance_b) override {}
+
+  virtual void distance_joint_set_param(RID p_joint, DistanceJointParam p_param, real_t p_value) override {}
+  virtual real_t distance_joint_get_param(RID p_joint, DistanceJointParam p_param) const override { return 0; }
+
 	virtual void joint_make_slider(RID p_joint, RID p_body_A, const Transform3D &p_local_frame_A, RID p_body_B, const Transform3D &p_local_frame_B) override {}
 
 	virtual void slider_joint_set_param(RID p_joint, SliderJointParam p_param, real_t p_value) override {}

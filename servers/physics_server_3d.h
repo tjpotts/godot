@@ -631,7 +631,7 @@ public:
 		JOINT_TYPE_CONE_TWIST,
 		JOINT_TYPE_6DOF,
 		JOINT_TYPE_MAX,
-
+		JOINT_TYPE_DISTANCE,
 	};
 
 	virtual RID joint_create() = 0;
@@ -689,6 +689,17 @@ public:
 
 	virtual void hinge_joint_set_flag(RID p_joint, HingeJointFlag p_flag, bool p_enabled) = 0;
 	virtual bool hinge_joint_get_flag(RID p_joint, HingeJointFlag p_flag) const = 0;
+
+	enum DistanceJointParam {
+		DISTANCE_JOINT_LIMIT_UPPER,
+		DISTANCE_JOINT_LIMIT_LOWER,
+		DISTANCE_JOINT_MAX
+	};
+
+	virtual void joint_make_distance(RID p_joint, RID p_body_A, const Transform3D &p_distance_a, RID p_body_B, const Transform3D &p_distance_b) = 0;
+
+	virtual void distance_joint_set_param(RID p_joint, DistanceJointParam p_param, real_t p_value) = 0;
+	virtual real_t distance_joint_get_param(RID p_joint, DistanceJointParam p_param) const = 0;
 
 	enum SliderJointParam {
 		SLIDER_JOINT_LINEAR_LIMIT_UPPER,
@@ -1048,6 +1059,7 @@ VARIANT_ENUM_CAST(PhysicsServer3D::PinJointParam);
 VARIANT_ENUM_CAST(PhysicsServer3D::JointType);
 VARIANT_ENUM_CAST(PhysicsServer3D::HingeJointParam);
 VARIANT_ENUM_CAST(PhysicsServer3D::HingeJointFlag);
+VARIANT_ENUM_CAST(PhysicsServer3D::DistanceJointParam);
 VARIANT_ENUM_CAST(PhysicsServer3D::SliderJointParam);
 VARIANT_ENUM_CAST(PhysicsServer3D::ConeTwistJointParam);
 VARIANT_ENUM_CAST(PhysicsServer3D::G6DOFJointAxisParam);

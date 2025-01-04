@@ -31,6 +31,7 @@
 #include "jolt_physics_server_3d.h"
 
 #include "joints/jolt_cone_twist_joint_3d.h"
+#include "joints/jolt_distance_joint_3d.h"
 #include "joints/jolt_generic_6dof_joint_3d.h"
 #include "joints/jolt_hinge_joint_3d.h"
 #include "joints/jolt_joint_3d.h"
@@ -1367,6 +1368,44 @@ bool JoltPhysicsServer3D::hinge_joint_get_flag(RID p_joint, HingeJointFlag p_fla
 	const JoltHingeJoint3D *hinge_joint = static_cast<const JoltHingeJoint3D *>(joint);
 
 	return hinge_joint->get_flag(p_flag);
+}
+
+void JoltPhysicsServer3D::joint_make_distance(RID p_joint, RID p_body_a, const Transform3D &p_distance_a, RID p_body_b, const Transform3D &p_distance_b) {
+	JoltJoint3D *old_joint = joint_owner.get_or_null(p_joint);
+	ERR_FAIL_NULL(old_joint);
+
+	JoltBody3D *body_a = body_owner.get_or_null(p_body_a);
+	ERR_FAIL_NULL(body_a);
+
+	JoltBody3D *body_b = body_owner.get_or_null(p_body_b);
+	ERR_FAIL_COND(body_a == body_b);
+
+	JoltJoint3D *new_joint = memnew(JoltDistanceJoint3D(*old_joint, body_a, body_b, p_distance_a, p_distance_b));
+
+	memdelete(old_joint);
+	old_joint = nullptr;
+
+	joint_owner.replace(p_joint, new_joint);
+}
+
+void JoltPhysicsServer3D::distance_joint_set_param(RID p_joint, DistanceJointParam p_param, real_t p_value) {
+	JoltJoint3D *joint = joint_owner.get_or_null(p_joint);
+	ERR_FAIL_NULL(joint);
+
+	ERR_FAIL_COND(joint->get_type() != JOINT_TYPE_DISTANCE);
+	JoltDistanceJoint3D *distance_joint = static_cast<JoltDistanceJoint3D *>(joint);
+
+	return distance_joint->set_param(p_param, (double)p_value);
+}
+
+real_t JoltPhysicsServer3D::distance_joint_get_param(RID p_joint, DistanceJointParam p_param) const {
+	const JoltJoint3D *joint = joint_owner.get_or_null(p_joint);
+	ERR_FAIL_NULL_V(joint, 0.0);
+
+	ERR_FAIL_COND_V(joint->get_type() != JOINT_TYPE_DISTANCE, 0.0);
+	const JoltDistanceJoint3D *distance_joint = static_cast<const JoltDistanceJoint3D *>(joint);
+
+	return (real_t)distance_joint->get_param(p_param);
 }
 
 void JoltPhysicsServer3D::joint_make_slider(RID p_joint, RID p_body_a, const Transform3D &p_local_ref_a, RID p_body_b, const Transform3D &p_local_ref_b) {
